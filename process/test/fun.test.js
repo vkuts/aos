@@ -4,7 +4,74 @@ import AoLoader from '@permaweb/ao-loader'
 import fs from 'fs'
 
 const wasm = fs.readFileSync('./process.wasm')
-const options = { format: "wasm64-unknown-emscripten-draft_2024_02_15" }
+const options = {
+	format: "wasm32-unknown-emscripten4", // wasm64-unknown-emscripten-draft_2024_02_15
+	extensions: [],
+ }
+
+test('Use vlad_rusty.add_two_integers successfully', async () => {
+  const handle = await AoLoader(wasm, options);
+	const env = {
+		Process: {
+			Id: 'AOS',
+			Owner: 'FOOBAR',
+			Tags: [{ name: 'Name', value: 'Thomas' }],
+		},
+	};
+
+	const data = `
+    local result = add_two_integers(3, 4)
+		return result
+	`;
+	const msg = {
+		Target: 'AOS',
+		From: 'FOOBAR',
+		Owner: 'FOOBAR',
+		['Block-Height']: '1000',
+		Id: '1234xyxfoo',
+		Module: 'WOOPAWOOPA',
+		Tags: [{ name: 'Action', value: 'Eval' }],
+		Data: data,
+	};
+
+	const result = await handle(null, msg, env);
+
+  assert.equal(result.Error, undefined)
+  assert.equal(result.Output?.data, "7")
+  assert.ok(true)
+})
+
+test('Use vlad_rusty.subtract_two_integers successfully', async () => {
+  const handle = await AoLoader(wasm, options);
+	const env = {
+		Process: {
+			Id: 'AOS',
+			Owner: 'FOOBAR',
+			Tags: [{ name: 'Name', value: 'Thomas' }],
+		},
+	};
+
+	const data = `
+    local result = subtract_two_integers(3, 4)
+		return result
+	`;
+	const msg = {
+		Target: 'AOS',
+		From: 'FOOBAR',
+		Owner: 'FOOBAR',
+		['Block-Height']: '1000',
+		Id: '1234xyxfoo',
+		Module: 'WOOPAWOOPA',
+		Tags: [{ name: 'Action', value: 'Eval' }],
+		Data: data,
+	};
+
+	const result = await handle(null, msg, env);
+
+  assert.equal(result.Error, undefined)
+  assert.equal(result.Output?.data, "-1")
+  assert.ok(true)
+})
 
 test('Use foo lib successfully', async () => {
   const handle = await AoLoader(wasm, options);
@@ -104,65 +171,3 @@ test('run evaluate action successfully', async () => {
   assert.equal(result.Output?.data, '2')
   assert.ok(true)
 })
-
-// test('print hello world', async () => {
-//   const handle = await AoLoader(wasm, options)
-//   const env = {
-//     Process: {
-//       Id: 'AOS',
-//       Owner: 'FOOBAR',
-//       Tags: [
-//         { name: 'Name', value: 'Thomas' }
-//       ]
-//     }
-//   }
-//   const msg = {
-//     Target: 'AOS',
-//     From: 'FOOBAR',
-//     Owner: 'FOOBAR',
-//     ['Block-Height']: "1000",
-//     Id: "1234xyxfoo",
-//     Module: "WOOPAWOOPA",
-//     Tags: [
-//       { name: 'Action', value: 'Eval' }
-//     ],
-//     Data: `print("Hello World")`
-
-//   }
-//   const result = await handle(null, msg, env)
-//   assert.equal(result.Output?.data, "Hello World")
-//   assert.ok(true)
-// })
-
-
-// test('create an Assignment', async () => {
-//   const handle = await AoLoader(wasm, options)
-//   const env = {
-//     Process: {
-//       Id: 'AOS',
-
-//       Owner: 'FOOBAR',
-//       Tags: [
-//         { name: 'Name', value: 'Thomas' }
-//       ]
-//     }
-//   }
-//   const msg = {
-//     Target: 'AOS',
-//     From: 'FOOBAR',
-//     Owner: 'FOOBAR',
-//     ['Block-Height']: "1000",
-//     Id: "1234xyxfoo",
-//     Module: "WOOPAWOOPA",
-//     Tags: [
-//       { name: 'Action', value: 'Eval' }
-//     ],
-//     Data: 'Assign({ Processes = { "pid-1", "pid-2" }, Message = "mid-1" })'
-//   }
-//   const result = await handle(null, msg, env)
-
-//   assert.deepStrictEqual(result.Assignments, [
-//     { Processes: ['pid-1', 'pid-2'], Message: 'mid-1' }
-//   ])
-//   assert.ok(true)
-// })
