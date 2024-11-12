@@ -5,8 +5,7 @@ import fs from 'fs'
 
 const wasm = fs.readFileSync('./process.wasm')
 const options = {
-	format: "wasm32-unknown-emscripten4", // wasm64-unknown-emscripten-draft_2024_02_15
-	extensions: [],
+	format: "wasm64-unknown-emscripten-draft_2024_02_15", // "wasm32-unknown-emscripten4"
  }
 
 test('Use vlad_rusty.add_two_integers successfully', async () => {
