@@ -68,7 +68,7 @@ test('Use vlad_rusty to say hi to a fren', async () => {
 	const result = await handle(null, msg, env);
 
   assert.equal(result.Error, undefined)
-  assert.equal(result.Output?.data, "ohai")
+  assert.equal(result.Output?.data, "Hi, Vic!")
   assert.ok(true)
 })
 
