@@ -1,2 +1,2 @@
 Build like so:
-cargo build --release
+`cargo build --release`
