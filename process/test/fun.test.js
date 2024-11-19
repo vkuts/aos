@@ -5,7 +5,8 @@ import fs from 'fs'
 
 const wasm = fs.readFileSync('./process.wasm')
 const options = {
-	format: "wasm32-unknown-emscripten3", // wasm64-unknown-emscripten-draft_2024_02_15
+	// format: "wasm32-unknown-emscripten",
+	format: "wasm64-unknown-emscripten-draft_2024_02_15",
  }
 
  test('Use vlad_rusty to get ohai', async () => {
